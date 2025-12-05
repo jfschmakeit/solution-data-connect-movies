@@ -29,31 +29,33 @@ import MovieRating from "@/components/movie-rating";
 
 // Define the page props to get the movie ID from the URL params
 interface MoviePageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
-export default async function MovieDetailsPage({ params }: MoviePageProps) {
-	// Fetch movie data using the moviePage method
-	const result = await moviePage(dc, { movieId: params.id });
-	const movie = result.data.movie;
+export default async function MovieDetailsPage(props: MoviePageProps) {
+    const params = await props.params;
+    // Fetch movie data using the moviePage method
+    const result = await moviePage(dc, { movieId: params.id });
+    const movie = result.data.movie;
 
-	// If movie not found, show error message
-	if (!movie) {
+    // If movie not found, show error message
+    if (!movie) {
 		return (
 			<div className="flex flex-col items-center justify-center min-h-screen">
 				<h1 className="text-2xl font-bold">Movie not found</h1>
 				<p>The movie you're looking for doesn't exist or has been removed.</p>
+				<p>{JSON.stringify(params)}</p>
 			</div>
 		);
 	}
 
-	// Extract release year from the date
-	const releaseYear = new Date(movie.releaseDate).getFullYear();
+    // Extract release year from the date
+    const releaseYear = new Date(movie.releaseDate).getFullYear();
 
-	// Function to format poster URL based on size
-	function urlFromSize(
+    // Function to format poster URL based on size
+    function urlFromSize(
 		posterUrl: string,
 		size: "small" | "medium" | "full" = "medium",
 	) {
@@ -67,7 +69,7 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
 		}
 	}
 
-	return (
+    return (
 		<div className="max-w-5xl mx-auto p-4">
 			<div className="flex flex-col md:flex-row gap-8">
 				{/* Movie poster */}
