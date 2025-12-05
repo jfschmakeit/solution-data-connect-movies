@@ -46,7 +46,6 @@ export default async function MovieDetailsPage(props: MoviePageProps) {
 			<div className="flex flex-col items-center justify-center min-h-screen">
 				<h1 className="text-2xl font-bold">Movie not found</h1>
 				<p>The movie you're looking for doesn't exist or has been removed.</p>
-				<p>{JSON.stringify(params)}</p>
 			</div>
 		);
 	}
